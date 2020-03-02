@@ -16,6 +16,8 @@ namespace BIM494_Assigment_I
         RecyclerView recyclerView;
         RecyclerViewAdapter adapter;
         EditText ChatActivityMessageEditText;
+        ProgressBar pb;
+        Button ChatActivitySendButton;
         int id;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -25,16 +27,18 @@ namespace BIM494_Assigment_I
             id = Intent.Extras.GetInt("id");
             this.Title = name;
             // Create your application here
-            
+            pb = FindViewById<ProgressBar>(Resource.Id.pb);
+            pb.Max = 10;
+            pb.Progress = 0;
             recyclerView = FindViewById<RecyclerView>(Resource.Id.recyclerView1);
             ChatActivityMessageEditText = FindViewById<EditText>(Resource.Id.chat_activity_message_editText);
-            adapter = new RecyclerViewAdapter(MainActivity.messages[id]);
+            adapter = new RecyclerViewAdapter(MainActivity.messages[id], name);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.ApplicationContext);
             recyclerView.SetLayoutManager(layoutManager);
             recyclerView.SetItemAnimator(new DefaultItemAnimator());
             recyclerView.SetAdapter(adapter);
             
-            Button ChatActivitySendButton = FindViewById<Button>(Resource.Id.ChatActivitySendButton);
+            ChatActivitySendButton = FindViewById<Button>(Resource.Id.ChatActivitySendButton);
             ChatActivitySendButton.Click += OnSendButtonClicked;
         }
 
@@ -44,6 +48,17 @@ namespace BIM494_Assigment_I
             MainActivity.messages[id].Add(ChatActivityMessageEditText.Text);
             ChatActivityMessageEditText.Text = "";
             adapter.NotifyDataSetChanged();
+            recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
+            RunOnUiThread(() =>
+            {
+                pb.IncrementProgressBy(1);
+                if(pb.Progress >= 10)
+                {
+                    Toast.MakeText(this, "You've reached the message limit.", ToastLength.Long).Show();
+                    ChatActivitySendButton.Clickable = false;
+                }
+            });
+            
         }
     }
 }

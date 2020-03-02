@@ -17,21 +17,24 @@ namespace BIM494_Assigment_I
     public class RecyclerViewAdapter : RecyclerView.Adapter
     {
         private List<string> messages;
-        public RecyclerViewAdapter(List<string> messages)
+        string name;
+        public RecyclerViewAdapter(List<string> messages, string name)
         {
             this.messages = messages;
-
+            this.name = name;
         }
 
 
         public class MyViewHolder : RecyclerView.ViewHolder
         {
+            //public TextView ChatActivityName;
             public TextView messageTextView;
             public MyViewHolder(View itemView) : base(itemView)
             {
                
-                messageTextView = itemView.FindViewById<TextView>(Resource.Id.recyclerview_list_row_textView);
-                
+                messageTextView = itemView.FindViewById<TextView>(Resource.Id.recyclerview_list_row_message);
+                //ChatActivityName = itemView.FindViewById<TextView>(Resource.Id.recyclerview_list_row_name);
+
             }
         }
         public override int ItemCount => messages.Count;
@@ -41,6 +44,7 @@ namespace BIM494_Assigment_I
             string chatMessage = messages[position];
             MyViewHolder myViewHolder = holder as MyViewHolder;
             myViewHolder.messageTextView.Text = chatMessage;
+            //myViewHolder.ChatActivityName.Text = name;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
