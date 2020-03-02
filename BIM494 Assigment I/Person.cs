@@ -3,17 +3,23 @@ using Java.Lang;
 
 public class Person
 {
-
+    private int id;
     private string name;
-    private string message;
     private int imageId;
 
-    public Person(string name, string message, int imageId)
+    public Person(int id, string name, int imageId)
     {
+        this.id = id;
         this.name = name;
-        this.message = message;
         this.imageId = imageId;
 
+    }
+
+
+    public int Id   // property
+    {
+        get { return id; }   // get method
+        set { id = value; }  // set method
     }
 
     public string Name   // property
@@ -22,11 +28,6 @@ public class Person
         set { name = value; }  // set method
     }
 
-    public string Message   // property
-    {
-        get { return message; }   // get method
-        set { message = value; }  // set method
-    }
 
     public int ImageId   // property
     {
