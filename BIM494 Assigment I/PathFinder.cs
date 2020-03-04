@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.Database;
 using Android.OS;
 using Android.Provider;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+using System;
 
 namespace BIM494_Assigment_I
 {
@@ -23,9 +15,9 @@ namespace BIM494_Assigment_I
             this.context = context;
         }
 
-        private string GetActualPathFromFile(Android.Net.Uri uri)
+        public static string GetActualPathFromFile(Context context, Android.Net.Uri uri)
         {
-            bool isKitKat = Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat;
+            bool isKitKat = Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat;
 
             if (isKitKat && DocumentsContract.IsDocumentUri(context, uri))
             {

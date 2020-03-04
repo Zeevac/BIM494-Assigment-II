@@ -1,10 +1,10 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Widget;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using static Android.Widget.AdapterView;
 
@@ -15,24 +15,28 @@ namespace BIM494_Assigment_I
     {
         public static List<Person> persons = new List<Person>();
         public static Dictionary<int, List<string>> messages = new Dictionary<int, List<string>>();
-        PersonAdapter adapter;
+        private PersonAdapter adapter;
         private static int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
-            persons.Add(new Person(0, "Safa", Resource.Drawable.person));
-            persons.Add(new Person(1, "Melis", Resource.Drawable.person));
-            persons.Add(new Person(2, "Orkun", Resource.Drawable.person));
-            messages[0] = new List<string>();
-            messages[1] = new List<string>();
-            messages[2] = new List<string>();
-            messages[0].Add("Naber?");
-            messages[0].Add("Nasılsın?");
-            messages[1].Add("Nerdesin?");
-            messages[1].Add("Saat Kaç?");
-            messages[2].Add("Buluşalım mı?");
-            messages[2].Add("Kaçta?");
+            if (persons.Count == 0)
+            {
+                persons.Add(new Person(0, "Safa", BitmapFactory.DecodeResource(Resources, Resource.Drawable.person)));
+                persons.Add(new Person(1, "Melis", BitmapFactory.DecodeResource(Resources, Resource.Drawable.person)));
+                persons.Add(new Person(2, "Orkun", BitmapFactory.DecodeResource(Resources, Resource.Drawable.person)));
+                messages[0] = new List<string>();
+                messages[1] = new List<string>();
+                messages[2] = new List<string>();
+                messages[0].Add("Naber?");
+                messages[0].Add("Nasılsın?");
+                messages[1].Add("Nerdesin?");
+                messages[1].Add("Saat Kaç?");
+                messages[2].Add("Buluşalım mı?");
+                messages[2].Add("Kaçta?");
+            }
+
             ListView listView = (ListView)FindViewById(Resource.Id.listView);
 
             adapter = new PersonAdapter(this, persons);
@@ -60,9 +64,14 @@ namespace BIM494_Assigment_I
                 StartActivity(intent);
             };
 
-            if (Intent.GetStringExtra("person") != null)
+            if (Intent.GetStringExtra("personName") != null)
             {
-                Person newPerson = JsonConvert.DeserializeObject<Person>(Intent.GetStringExtra("person"));
+                int personID = Intent.GetIntExtra("personID", 0);
+                string personName = Intent.GetStringExtra("personName");
+                string personSurname = Intent.GetStringExtra("personSurname");
+                string personImagePath = Intent.GetStringExtra("personImagePath");
+                Bitmap personImage = BitmapFactory.DecodeFile(personImagePath);
+                Person newPerson = new Person(personID, personName + " " + personSurname, personImage);
                 persons.Add(newPerson);
                 messages.Add(newPerson.Id, new List<string>());
                 adapter.NotifyDataSetChanged();
@@ -70,6 +79,10 @@ namespace BIM494_Assigment_I
 
         }
 
-
+        protected override void OnResume()
+        {
+            base.OnResume();
+            adapter.NotifyDataSetChanged();
+        }
     }
 }

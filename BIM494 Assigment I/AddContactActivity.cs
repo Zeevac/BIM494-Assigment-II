@@ -3,13 +3,11 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
-using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Provider;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Widget;
-using Newtonsoft.Json;
 using System;
 
 namespace BIM494_Assigment_I
@@ -24,7 +22,8 @@ namespace BIM494_Assigment_I
         private int index;
         private string filename;
         public static int SELECT_IMAGE = 1001;
-        private Drawable drawable;
+        private Bitmap newPersonImage;
+        private string path;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -41,12 +40,21 @@ namespace BIM494_Assigment_I
 
         private void addContactButtonClicked(object sender, EventArgs e)
         {
-            index = MainActivity.messages.Count;
-            Console.WriteLine(index);
-            Person newPerson = new Person(index, nameEditText.Text + " " + surnameEditText.Text, drawable.GetHashCode());
-            Intent intent = new Intent(this, typeof(MainActivity));
-            intent.PutExtra("person", JsonConvert.SerializeObject(newPerson));
-            StartActivity(intent);
+            if (nameEditText.Text != "" && imageView.Drawable != null)
+            {
+                index = MainActivity.messages.Count;
+                Intent intent = new Intent(this, typeof(MainActivity));
+                intent.PutExtra("personID", index);
+                intent.PutExtra("personName", nameEditText.Text);
+                intent.PutExtra("personSurname", surnameEditText.Text);
+                intent.PutExtra("personImagePath", path);
+                StartActivity(intent);
+            }
+            else
+            {
+                Toast.MakeText(ApplicationContext, "You should at least enter a name and an image!", ToastLength.Short).Show();
+            }
+
         }
 
         private void loadButtonClicked(object sender, EventArgs e)
@@ -69,8 +77,9 @@ namespace BIM494_Assigment_I
             if ((requestCode == SELECT_IMAGE) && (resultCode == Result.Ok) && (data != null))
             {
                 Android.Net.Uri uri = data.Data;
-                Bitmap bitmap = MediaStore.Images.Media.GetBitmap(ContentResolver, uri);
-                imageView.SetImageBitmap(bitmap);
+                newPersonImage = MediaStore.Images.Media.GetBitmap(ContentResolver, uri);
+                path = PathFinder.GetActualPathFromFile(this, uri);
+                imageView.SetImageBitmap(newPersonImage);
             }
             else
             {

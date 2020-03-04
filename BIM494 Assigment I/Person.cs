@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Android.Graphics;
+using System;
 
 public class Person
 {
     private int id;
     private string name;
-    private int imageId;
+    private Bitmap image;
 
-    public Person(int id, string name, int imageId)
+    public Person(int id, string name, Bitmap image)
     {
         this.id = id;
         this.name = name;
-        this.imageId = imageId;
+        this.image = image;
 
     }
+
+    public Person() { }
 
 
     public int Id   // property
@@ -28,10 +31,10 @@ public class Person
     }
 
 
-    public int ImageId   // property
+    public Bitmap Image   // property
     {
-        get => imageId;    // get method
-        set => imageId = value;   // set method
+        get => image;    // get method
+        set => image = value;   // set method
     }
 
     public static explicit operator Java.Lang.Object(Person v)

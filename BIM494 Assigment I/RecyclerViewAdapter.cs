@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using System.Collections.Generic;
 
 namespace BIM494_Assigment_I
 {
@@ -17,7 +10,7 @@ namespace BIM494_Assigment_I
     public class RecyclerViewAdapter : RecyclerView.Adapter
     {
         private List<string> messages;
-        string name;
+        private string name;
         public RecyclerViewAdapter(List<string> messages, string name)
         {
             this.messages = messages;
@@ -31,7 +24,7 @@ namespace BIM494_Assigment_I
             public TextView messageTextView;
             public MyViewHolder(View itemView) : base(itemView)
             {
-               
+
                 messageTextView = itemView.FindViewById<TextView>(Resource.Id.recyclerview_list_row_message);
                 //ChatActivityName = itemView.FindViewById<TextView>(Resource.Id.recyclerview_list_row_name);
 
@@ -49,9 +42,9 @@ namespace BIM494_Assigment_I
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.recyclerview_list_row,parent,false);
+            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.recyclerview_list_row, parent, false);
             return new MyViewHolder(itemView);
         }
-        
+
     }
 }
