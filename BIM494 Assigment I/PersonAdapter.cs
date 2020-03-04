@@ -39,7 +39,14 @@ public class PersonAdapter : BaseAdapter
         ImageView personImage = (ImageView)convertView.FindViewById(Resource.Id.imageView);
         Person person = personArrayList.ElementAt(position);
         personName.Text = person.Name;
-        personMessage.Text = MainActivity.messages[person.Id][MainActivity.messages[person.Id].Count - 1];
+        if(MainActivity.messages[person.Id].Count != 0)
+            {
+                personMessage.Text = MainActivity.messages[person.Id][MainActivity.messages[person.Id].Count - 1];
+            }
+        else
+            {
+                personMessage.Text = "";
+            }
         personImage.SetImageResource(person.ImageId);
         return convertView;
     }

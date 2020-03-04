@@ -1,5 +1,4 @@
 ﻿using System;
-using Java.Lang;
 
 public class Person
 {
@@ -18,21 +17,21 @@ public class Person
 
     public int Id   // property
     {
-        get { return id; }   // get method
-        set { id = value; }  // set method
+        get => id;    // get method
+        set => id = value;   // set method
     }
 
     public string Name   // property
     {
-        get { return name; }   // get method
-        set { name = value; }  // set method
+        get => name;    // get method
+        set => name = value;   // set method
     }
 
 
     public int ImageId   // property
     {
-        get { return imageId; }   // get method
-        set { imageId = value; }  // set method
+        get => imageId;    // get method
+        set => imageId = value;   // set method
     }
 
     public static explicit operator Java.Lang.Object(Person v)

@@ -60,5 +60,26 @@ namespace BIM494_Assigment_I
             });
             
         }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            this.MenuInflater.Inflate(Resource.Menu.details_menu, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if(item.ItemId == Resource.Id.action_details)
+            {
+                Intent intent = new Intent(this.ApplicationContext, typeof(UserDetailsActivity));
+                intent.PutExtra("id", id);
+                StartActivity(intent);
+            }
+           
+
+            return base.OnOptionsItemSelected(item);
+        }
+
+
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="AddContactActivity.cs" />
     <Compile Include="ChatActivity.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="PathFinder.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonAdapter.cs" />
     <Compile Include="RecyclerViewAdapter.cs" />
@@ -117,9 +118,6 @@
     <AndroidResource Include="Resources\Drawable\image.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\add.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\activity_addContact.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -154,7 +152,22 @@
     <AndroidResource Include="Resources\Drawable\bubble_yellow.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\send.png" />
+    <AndroidResource Include="Resources\Drawable\whatsapp_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\edit_text_bg.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\send_32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\details_menu.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\contact_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\person.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

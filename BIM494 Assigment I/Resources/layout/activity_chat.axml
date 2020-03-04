@@ -2,10 +2,12 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
+	android:background="@drawable/whatsapp_bg"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 	<LinearLayout
 		android:orientation="horizontal"
+		android:background="@android:color/white"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 		<TextView
@@ -26,27 +28,32 @@
 	<android.support.v7.widget.RecyclerView
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="20"
+		android:layout_weight="25"
 		android:scrollbars="vertical"
 		android:id="@+id/recyclerView1" />
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="2"
+		android:layout_weight="4"
 		android:id="@+id/linearLayout1">
 		<EditText
 			android:layout_width="0dp"
-			android:layout_weight="6"
-			android:layout_height="wrap_content"
+			android:layout_weight="7"
+			android:layout_marginLeft="5dp"
+			android:layout_marginRight="5dp"
+			android:layout_gravity="center_vertical"
+			android:background="@drawable/edit_text_bg"
+			android:layout_height="48dp"
 			android:id="@+id/chat_activity_message_editText"
 			android:hint="Enter a message"/>
 		<Button
 			android:text=""
-			android:layout_weight="1"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:background="@drawable/send"
+			android:layout_gravity="center_vertical"
+			android:layout_width="48dp"
+			android:layout_marginRight="5dp"
+			android:layout_height="48dp"
+			android:background="@drawable/send_32px"
 			android:id="@+id/ChatActivitySendButton" />
 	</LinearLayout>
 </LinearLayout>
