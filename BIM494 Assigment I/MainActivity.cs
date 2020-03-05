@@ -21,11 +21,12 @@ namespace BIM494_Assigment_I
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
+
             if (persons.Count == 0)
             {
-                persons.Add(new Person(0, "Safa", BitmapFactory.DecodeResource(Resources, Resource.Drawable.person)));
-                persons.Add(new Person(1, "Melis", BitmapFactory.DecodeResource(Resources, Resource.Drawable.person)));
-                persons.Add(new Person(2, "Orkun", BitmapFactory.DecodeResource(Resources, Resource.Drawable.person)));
+                persons.Add(new Person(0, "Safa", BitmapFactory.DecodeResource(Resources, Resource.Drawable.man1)));
+                persons.Add(new Person(1, "Melis", BitmapFactory.DecodeResource(Resources, Resource.Drawable.woman2)));
+                persons.Add(new Person(2, "Orkun", BitmapFactory.DecodeResource(Resources, Resource.Drawable.man2)));
                 messages[0] = new List<string>();
                 messages[1] = new List<string>();
                 messages[2] = new List<string>();

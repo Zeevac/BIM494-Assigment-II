@@ -49,6 +49,7 @@ namespace BIM494_Assigment_I
                 intent.PutExtra("personSurname", surnameEditText.Text);
                 intent.PutExtra("personImagePath", path);
                 StartActivity(intent);
+                Finish();
             }
             else
             {

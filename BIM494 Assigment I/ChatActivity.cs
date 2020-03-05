@@ -6,11 +6,10 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using System;
-using static Android.App.ActionBar;
 
 namespace BIM494_Assigment_I
 {
-    [Activity(Label = "ChatActivity")]
+    [Activity(Label = "ChatActivity", Theme = "@style/MyTheme")]
     public class ChatActivity : AppCompatActivity
     {
         private RecyclerView recyclerView;
@@ -23,13 +22,20 @@ namespace BIM494_Assigment_I
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_chat);
+            Android.Support.V7.Widget.Toolbar toolbar = (Android.Support.V7.Widget.Toolbar)FindViewById(Resource.Id.toolbar);
+            SetSupportActionBar(toolbar);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.SetDisplayShowHomeEnabled(true);
             string name = Intent.Extras.GetString("name");
             id = Intent.Extras.GetInt("id");
             Title = name;
-            // Create your application here
             pb = FindViewById<ProgressBar>(Resource.Id.pb);
             pb.Max = 10;
             pb.Progress = 0;
+            ImageView actionBarImageView = FindViewById<ImageView>(Resource.Id.conversation_contact_photo);
+            TextView actionBarNameTW = FindViewById<TextView>(Resource.Id.action_bar_title_1);
+            actionBarImageView.SetImageBitmap(MainActivity.persons[id].Image);
+            actionBarNameTW.Text = MainActivity.persons[id].Name;
             recyclerView = FindViewById<RecyclerView>(Resource.Id.recyclerView1);
             ChatActivityMessageEditText = FindViewById<EditText>(Resource.Id.chat_activity_message_editText);
             adapter = new RecyclerViewAdapter(MainActivity.messages[id], name);
@@ -44,7 +50,7 @@ namespace BIM494_Assigment_I
 
         private void OnSendButtonClicked(object sender, EventArgs e)
         {
-            if(ChatActivityMessageEditText.Text != "")
+            if (ChatActivityMessageEditText.Text != "")
             {
                 MainActivity.messages[id].Add(ChatActivityMessageEditText.Text);
                 ChatActivityMessageEditText.Text = "";
@@ -59,7 +65,7 @@ namespace BIM494_Assigment_I
                         ChatActivitySendButton.Clickable = false;
                     }
                 });
-            }    
+            }
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -75,6 +81,10 @@ namespace BIM494_Assigment_I
                 Intent intent = new Intent(ApplicationContext, typeof(UserDetailsActivity));
                 intent.PutExtra("id", id);
                 StartActivity(intent);
+            }
+            else if(item.ItemId == Android.Resource.Id.Home)
+            {
+                Finish();
             }
 
 

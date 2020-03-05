@@ -5,6 +5,18 @@
 	android:background="@drawable/whatsapp_bg"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
+
+	<android.support.design.widget.AppBarLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize">
+			<include layout="@layout/toolbar_conversation"/>
+		</android.support.v7.widget.Toolbar>
+	</android.support.design.widget.AppBarLayout>
+
 	<LinearLayout
 		android:orientation="horizontal"
 		android:background="@android:color/white"
@@ -17,6 +29,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="5dp"
 			android:textSize="10sp"
+			android:textColor="@android:color/black"
 			android:textStyle="bold"/>
 		<ProgressBar
 			android:id="@+id/pb"
@@ -48,6 +61,8 @@
 			android:layout_gravity="center_vertical"
 			android:background="@drawable/edit_text_bg"
 			android:layout_height="48dp"
+			android:textColor="@android:color/black"
+			android:textColorHint="?android:attr/textColorHighlightInverse"
 			android:id="@+id/chat_activity_message_editText"
 			android:hint="Enter a message"/>
 		<Button
