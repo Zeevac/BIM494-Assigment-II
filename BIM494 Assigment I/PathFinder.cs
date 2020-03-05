@@ -8,12 +8,6 @@ namespace BIM494_Assigment_I
 {
     public class PathFinder
     {
-        private Context context;
-
-        public PathFinder(Context context)
-        {
-            this.context = context;
-        }
 
         public static string GetActualPathFromFile(Context context, Android.Net.Uri uri)
         {

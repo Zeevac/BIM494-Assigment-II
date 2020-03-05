@@ -20,13 +20,11 @@ namespace BIM494_Assigment_I
 
         public class MyViewHolder : RecyclerView.ViewHolder
         {
-            //public TextView ChatActivityName;
             public TextView messageTextView;
             public MyViewHolder(View itemView) : base(itemView)
             {
 
                 messageTextView = itemView.FindViewById<TextView>(Resource.Id.recyclerview_list_row_message);
-                //ChatActivityName = itemView.FindViewById<TextView>(Resource.Id.recyclerview_list_row_name);
 
             }
         }
@@ -37,7 +35,6 @@ namespace BIM494_Assigment_I
             string chatMessage = messages[position];
             MyViewHolder myViewHolder = holder as MyViewHolder;
             myViewHolder.messageTextView.Text = chatMessage;
-            //myViewHolder.ChatActivityName.Text = name;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)

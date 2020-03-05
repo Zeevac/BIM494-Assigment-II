@@ -16,7 +16,7 @@ namespace BIM494_Assigment_I
         public static List<Person> persons = new List<Person>();
         public static Dictionary<int, List<string>> messages = new Dictionary<int, List<string>>();
         private PersonAdapter adapter;
-        private static int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);

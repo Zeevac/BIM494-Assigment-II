@@ -6,6 +6,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using System;
+using static Android.App.ActionBar;
 
 namespace BIM494_Assigment_I
 {
@@ -36,28 +37,29 @@ namespace BIM494_Assigment_I
             recyclerView.SetLayoutManager(layoutManager);
             recyclerView.SetItemAnimator(new DefaultItemAnimator());
             recyclerView.SetAdapter(adapter);
-
+            recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
             ChatActivitySendButton = FindViewById<Button>(Resource.Id.ChatActivitySendButton);
             ChatActivitySendButton.Click += OnSendButtonClicked;
         }
 
         private void OnSendButtonClicked(object sender, EventArgs e)
         {
-
-            MainActivity.messages[id].Add(ChatActivityMessageEditText.Text);
-            ChatActivityMessageEditText.Text = "";
-            adapter.NotifyDataSetChanged();
-            recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
-            RunOnUiThread(() =>
+            if(ChatActivityMessageEditText.Text != "")
             {
-                pb.IncrementProgressBy(1);
-                if (pb.Progress >= 10)
+                MainActivity.messages[id].Add(ChatActivityMessageEditText.Text);
+                ChatActivityMessageEditText.Text = "";
+                adapter.NotifyDataSetChanged();
+                recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
+                RunOnUiThread(() =>
                 {
-                    Toast.MakeText(this, "You've reached the message limit.", ToastLength.Long).Show();
-                    ChatActivitySendButton.Clickable = false;
-                }
-            });
-
+                    pb.IncrementProgressBy(1);
+                    if (pb.Progress >= 10)
+                    {
+                        Toast.MakeText(this, "You've reached the message limit.", ToastLength.Long).Show();
+                        ChatActivitySendButton.Clickable = false;
+                    }
+                });
+            }    
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
