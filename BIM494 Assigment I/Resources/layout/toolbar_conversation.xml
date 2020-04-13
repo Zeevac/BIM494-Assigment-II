@@ -34,7 +34,6 @@ android:layout_height="?actionBarSize"
       android:paddingRight="0.0dip"
       android:paddingTop="0.0dip" >
 
-
     <TextView
         android:id="@+id/action_bar_title_1"
         android:layout_width="wrap_content"
@@ -59,7 +58,5 @@ android:layout_height="?actionBarSize"
         android:text="last seen 1 hour ago"
         android:maxLines="1"
         android:textSize="12sp" />
-
-
   </LinearLayout>
 </RelativeLayout>
