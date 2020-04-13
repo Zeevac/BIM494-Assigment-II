@@ -4,7 +4,7 @@ using Android.Views;
 using Android.Widget;
 using System.Collections.Generic;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     [Activity(Label = "RecyclerViewAdapter")]
     public class RecyclerViewAdapter : RecyclerView.Adapter

@@ -4,7 +4,7 @@ using Android.Content;
 using Android.OS;
 using Android.Locations;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     [Service]
     public class LocationService : Service

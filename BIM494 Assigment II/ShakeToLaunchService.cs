@@ -4,7 +4,7 @@ using Android.Content;
 using Android.OS;
 using Android.Hardware;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     [Service]
     class ShakeToLaunchService : Service, ISensorEventListener

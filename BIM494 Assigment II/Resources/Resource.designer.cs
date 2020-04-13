@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("BIM494_Assigment_I.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("BIM494_Assigment_II.Resource", IsApplication=true)]
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
 	
 	

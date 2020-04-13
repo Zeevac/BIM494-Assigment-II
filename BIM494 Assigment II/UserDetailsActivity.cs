@@ -5,7 +5,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     [Activity(Label = "UserDetailsActivity")]
     public class UserDetailsActivity : AppCompatActivity

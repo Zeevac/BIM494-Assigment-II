@@ -8,7 +8,7 @@ using Android.Widget;
 using System.Collections.Generic;
 using static Android.Widget.AdapterView;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity

@@ -10,8 +10,8 @@
     <TemplateGuid>{122416d6-6b49-4ee2-a1e8-b825f31c79fe}</TemplateGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BIM494_Assigment_I</RootNamespace>
-    <AssemblyName>BIM494 Assigment I</AssemblyName>
+    <RootNamespace>BIM494_Assigment_II</RootNamespace>
+    <AssemblyName>BIM494 Assigment II</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
@@ -40,6 +40,7 @@
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidLinkSkip>
     </AndroidLinkSkip>
+    <AndroidSupportedAbis />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>

@@ -13,7 +13,7 @@ using Android.Views;
 using Android.Widget;
 using System;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     [Activity(Label = "ChatActivity", Theme = "@style/MyTheme")]
     public class ChatActivity : AppCompatActivity

@@ -10,7 +10,7 @@ using Android.Support.V4.Content;
 using Android.Widget;
 using System;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     [Activity(Label = "AddContactActivity")]
     public class AddContactActivity : Activity

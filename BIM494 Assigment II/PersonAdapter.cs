@@ -6,7 +6,7 @@ using Java.Lang;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     public class PersonAdapter : BaseAdapter
     {

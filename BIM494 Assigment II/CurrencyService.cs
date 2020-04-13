@@ -11,7 +11,7 @@ using Org.Apache.Http;
 using Java.IO;
 using Org.Json;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
 	[Service]
 	public class CurrencyService : Service

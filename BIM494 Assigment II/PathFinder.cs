@@ -4,7 +4,7 @@ using Android.OS;
 using Android.Provider;
 using System;
 
-namespace BIM494_Assigment_I
+namespace BIM494_Assigment_II
 {
     public class PathFinder
     {
