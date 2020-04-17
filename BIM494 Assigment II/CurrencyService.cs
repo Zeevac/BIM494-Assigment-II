@@ -1,7 +1,6 @@
-using System;
+
 using Android.App;
 using Android.Content;
-using Android.OS;
 using System.Threading.Tasks;
 using Java.Lang;
 using Org.Apache.Http.Client;
@@ -10,6 +9,7 @@ using Org.Apache.Http.Client.Methods;
 using Org.Apache.Http;
 using Java.IO;
 using Org.Json;
+using Android.OS;
 
 namespace BIM494_Assigment_II
 {
@@ -20,35 +20,41 @@ namespace BIM494_Assigment_II
 		public override void OnCreate()
 		{
 			base.OnCreate();
+            
+            
+        }
+
+        public async Task<string> DownloadCurrency()
+        {
             string s;
             string r = "";
-            Task.Run(() =>
+            await Task.Factory.StartNew(() =>
             {
-
-
-                try{
+                try
+                {
 
                     s = GetJson("https://api.exchangeratesapi.io/latest?base=USD");
                     JSONObject jObj = new JSONObject(s);
                     r = jObj.GetJSONObject("rates").GetString("TRY");
-                     
-                    StopSelf();
+                    System.Console.WriteLine("burada");
+          
 
-            }
-            catch (JSONException e)
-            {
+                }
+                catch (JSONException e)
+                {
 
-            }
-            catch (IOException e)
-            {
+                }
+                catch (IOException e)
+                {
 
-            }
+                }
             });
+            return r;
         }
 
 		public override IBinder OnBind(Intent intent)
 		{
-            throw new NotImplementedException();
+            return new CurrencyServiceBinder(this);
         }
 
 

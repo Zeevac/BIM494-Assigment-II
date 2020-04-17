@@ -21,7 +21,7 @@ namespace BIM494_Assigment_II
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
-            StartService(new Intent(this, typeof(ShakeToLaunchService)));
+            //StartService(new Intent(this, typeof(ShakeToLaunchService)));
 
             if (persons.Count == 0)
             {

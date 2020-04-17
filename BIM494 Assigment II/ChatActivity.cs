@@ -12,6 +12,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using System;
+using System.Collections.Generic;
 
 namespace BIM494_Assigment_II
 {
@@ -27,10 +28,16 @@ namespace BIM494_Assigment_II
         private Button ChatActivitySendButton,ChatActivityCameraButton;
         private int id;
         private LocationServiceConnection lsConnection;
-
+        private CurrencyServiceConnection csConnection;
+        private TextCheckerServiceConnection tsConnection;
+        IDictionary<string, string> dict = new Dictionary<string, string>();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            dict.Add("asap", "as soon as possible");
+            dict.Add("bbl", "be back like");
+            dict.Add("omg", "oh my god");
+            dict.Add("ttyl", "talk to you later");
             SetContentView(Resource.Layout.activity_chat);
             Android.Support.V7.Widget.Toolbar toolbar = (Android.Support.V7.Widget.Toolbar)FindViewById(Resource.Id.toolbar);
             SetSupportActionBar(toolbar);
@@ -59,7 +66,21 @@ namespace BIM494_Assigment_II
             ChatActivitySendButton.Click += OnSendButtonClicked;
             ChatActivityCameraButton.Click += OnCameraButtonClicked;
             lsConnection = new LocationServiceConnection();
+            csConnection = new CurrencyServiceConnection();
+            tsConnection = new TextCheckerServiceConnection();
             lsConnection.ServiceConnectionChanged += ServiceConnectionChanged;
+            csConnection.CurrencyServiceConnectionChanged += CurrencyServiceConnectionChanged;
+            var intent = new Intent(this, typeof(TextCheckerService));
+            BindService(intent, tsConnection, Bind.AutoCreate);
+        }
+
+        protected async void CurrencyServiceConnectionChanged(object sender, bool e)
+        {
+            string s = await csConnection.Service.DownloadCurrency();
+            MainActivity.messages[id].Add("Dolar Kuru: " + s);
+            adapter.NotifyDataSetChanged();
+            recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
+            UnbindService(csConnection);
         }
 
         void ServiceConnectionChanged(object sender, bool isConnected)
@@ -123,11 +144,24 @@ namespace BIM494_Assigment_II
             }
         }
 
-        private void OnSendButtonClicked(object sender, EventArgs e)
+        public void OnSendButtonClicked(object sender, EventArgs e)
         {
             if (ChatActivityMessageEditText.Text != "")
             {
-                MainActivity.messages[id].Add(ChatActivityMessageEditText.Text);
+                string message = ChatActivityMessageEditText.Text;
+                foreach (KeyValuePair<string, string> item in dict)
+                {
+                    if (message.Contains(item.Key))
+                    {
+                        message = tsConnection.Service.Translate(message);
+                        break;
+                    }
+                }
+                if (dict.ContainsKey(ChatActivityMessageEditText.Text)){
+                    
+                    
+                }         
+                MainActivity.messages[id].Add(message);
                 ChatActivityMessageEditText.Text = "";
                 adapter.NotifyDataSetChanged();
                 recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
@@ -154,7 +188,6 @@ namespace BIM494_Assigment_II
             adapter.NotifyDataSetChanged();
             recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
             UnbindService(lsConnection);
-
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -188,7 +221,7 @@ namespace BIM494_Assigment_II
             else if (item.ItemId == Resource.Id.action_currency)
             {
                 var intent = new Intent(this, typeof(CurrencyService));
-                StartService(intent);
+                BindService(intent, csConnection, Bind.AutoCreate);
             }
             else if(item.ItemId == Android.Resource.Id.Home)
             {
@@ -208,6 +241,15 @@ namespace BIM494_Assigment_II
             }
         }
 
+        protected override void OnPause()
+        {
+            base.OnPause();
+        }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            UnbindService(tsConnection);
+        }
     }
 }
