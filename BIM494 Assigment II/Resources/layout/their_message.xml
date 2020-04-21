@@ -21,4 +21,5 @@
 		android:textColor="#fff"
         android:text="How are you doing? This is a long message that should probably wrap."
         />
+
 </RelativeLayout>

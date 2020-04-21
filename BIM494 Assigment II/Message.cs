@@ -1,16 +1,20 @@
 ﻿using System;
+using Android.Graphics;
+
 namespace BIM494_Assigment_II
 {
     public class Message
     {
         private string text; // message body
+        public Bitmap Image { get; set; }
         private Person person; // data of the user that sent this message
         private bool belongsToCurrentUser; // is this message sent by us?
 
-        public Message(string text, Person person, bool belongsToCurrentUser)
+        public Message(string text,Bitmap image, Person person, bool belongsToCurrentUser)
         {
             this.text = text;
             this.person = person;
+            this.Image = image;
             this.belongsToCurrentUser = belongsToCurrentUser;
         }
 

@@ -32,9 +32,9 @@ namespace BIM494_Assigment_II
                 persons.Add(orkun);
                 messages[orkun] = new List<Message>();
                 messages[melis] = new List<Message>();
-                messages[orkun].Add(new Message("Selam", orkun, false));
-                messages[melis].Add(new Message("Naber", melis, false));
-                messages[melis].Add(new Message("Nerdesin", melis, false));
+                messages[orkun].Add(new Message("Selam",null, orkun, false));
+                messages[melis].Add(new Message("Naber", null,melis, false));
+                messages[melis].Add(new Message("Nerdesin",null,melis, false));
             }
 
                 ListView listView = (ListView)FindViewById(Resource.Id.listView);
