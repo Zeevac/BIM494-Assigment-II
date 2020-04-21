@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Widget;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using static Android.Widget.AdapterView;
 
@@ -14,82 +15,84 @@ namespace BIM494_Assigment_II
     public class MainActivity : AppCompatActivity
     {
         public static List<Person> persons = new List<Person>();
-        public static Dictionary<int, List<string>> messages = new Dictionary<int, List<string>>();
-        private PersonAdapter adapter;
+        public static Dictionary<Person, List<Message>> messages = new Dictionary<Person, List<Message>>();
+        public PersonAdapter adapter;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
-            //StartService(new Intent(this, typeof(ShakeToLaunchService)));
-
+            StartService(new Intent(this, typeof(ShakeToLaunchService)));
+            System.Diagnostics.Debug.WriteLine("MainActivity : OnCreate");
             if (persons.Count == 0)
             {
-                persons.Add(new Person(0, "Safa", BitmapFactory.DecodeResource(Resources, Resource.Drawable.man1)));
-                persons.Add(new Person(1, "Melisnaz", BitmapFactory.DecodeResource(Resources, Resource.Drawable.woman1)));
-                persons.Add(new Person(2, "Orkun", BitmapFactory.DecodeResource(Resources, Resource.Drawable.man2)));
-                messages[0] = new List<string>();
-                messages[1] = new List<string>();
-                messages[2] = new List<string>();
-                messages[0].Add("Naber?");
-                messages[0].Add("Nasılsın?");
-                messages[1].Add("Nerdesin?");
-                messages[1].Add("Saat Kaç?");
-                messages[2].Add("Buluşalım mı?");
-                messages[2].Add("Kaçta?");
+                Person melis = new Person(0, "Melisnaz", BitmapFactory.DecodeResource(Resources, Resource.Drawable.woman1));
+                persons.Add(melis);
+                Person orkun = new Person(1, "Orkun", BitmapFactory.DecodeResource(Resources, Resource.Drawable.man2));
+                persons.Add(orkun);
+                messages[orkun] = new List<Message>();
+                messages[melis] = new List<Message>();
+                messages[orkun].Add(new Message("Selam", orkun, false));
+                messages[melis].Add(new Message("Naber", melis, false));
+                messages[melis].Add(new Message("Nerdesin", melis, false));
             }
 
-            ListView listView = (ListView)FindViewById(Resource.Id.listView);
+                ListView listView = (ListView)FindViewById(Resource.Id.listView);
 
-            adapter = new PersonAdapter(this, persons);
+                adapter = new PersonAdapter(this, persons);
 
-            listView.Adapter = adapter;
-
-
-
-            listView.ItemClick += (object sender, ItemClickEventArgs e) =>
-            {
-                Person person = persons[e.Position];
-                Intent intent = new Intent(this, typeof(ChatActivity));
-                intent.PutExtra("name", person.Name);
-                intent.PutExtra("id", person.Id);
-                StartActivity(intent);
-            };
+                listView.Adapter = adapter;
 
 
 
-            FloatingActionButton fab = (FloatingActionButton)FindViewById(Resource.Id.fab);
+                listView.ItemClick += (object sender, ItemClickEventArgs e) =>
+                {
+                    Person person = persons[e.Position];
+                    ChatActivity.currentPerson = person;
+                    Intent intent = new Intent(this, typeof(ChatActivity));
+                    intent.PutExtra("name", person.Name);
+                    intent.PutExtra("id", person.Id);
+                    intent.PutExtra("person", JsonConvert.SerializeObject(person));
+                    StartActivity(intent);
+                };
 
-            fab.Click += delegate
-            {
-                Intent intent = new Intent(this, typeof(AddContactActivity));
-                StartActivity(intent);
-            };
 
-            if (Intent.GetStringExtra("personName") != null)
-            {
-                int personID = Intent.GetIntExtra("personID", 0);
-                string personName = Intent.GetStringExtra("personName");
-                string personSurname = Intent.GetStringExtra("personSurname");
-                string personImagePath = Intent.GetStringExtra("personImagePath");
-                Bitmap personImage = BitmapFactory.DecodeFile(personImagePath);
-                Person newPerson = new Person(personID, personName + " " + personSurname, personImage);
-                persons.Add(newPerson);
-                messages.Add(newPerson.Id, new List<string>());
-                adapter.NotifyDataSetChanged();
-            }
 
+                FloatingActionButton fab = (FloatingActionButton)FindViewById(Resource.Id.fab);
+
+                fab.Click += delegate
+                {
+                    Intent intent = new Intent(this, typeof(AddContactActivity));
+                    StartActivity(intent);
+                };
+
+                if (Intent.GetStringExtra("personName") != null)
+                {
+                    int personID = Intent.GetIntExtra("personID", 0);
+                    string personName = Intent.GetStringExtra("personName");
+                    string personSurname = Intent.GetStringExtra("personSurname");
+                    string personImagePath = Intent.GetStringExtra("personImagePath");
+                    Bitmap personImage = BitmapFactory.DecodeFile(personImagePath);
+                    Person newPerson = new Person(personID, personName + " " + personSurname, personImage);
+                    persons.Add(newPerson);
+                    messages.Add(newPerson, new List<Message>());
+                    adapter.NotifyDataSetChanged();
+                }
+
+            
         }
 
         protected override void OnResume()
         {
             base.OnResume();
+            System.Diagnostics.Debug.WriteLine("MainActivity : OnResume");
             adapter.NotifyDataSetChanged();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            System.Diagnostics.Debug.WriteLine("MainActivity : OnDestroy");
             StopService(new Intent(this, typeof(ShakeToLaunchService)));
         }
     }

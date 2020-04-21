@@ -8,7 +8,6 @@ using Android.Provider;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Support.V7.App;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using System;
@@ -21,16 +20,18 @@ namespace BIM494_Assigment_II
     {
         static int REQUEST_IMAGE_CAPTURE = 51521;
         static int REQUEST_LOCATION = 23231;
-        private RecyclerView recyclerView;
-        private RecyclerViewAdapter adapter;
         private EditText ChatActivityMessageEditText;
         private ProgressBar pb;
-        private Button ChatActivitySendButton,ChatActivityCameraButton;
+        private Button ChatActivitySendButton, ChatActivityCameraButton;
         private int id;
+        private MessageAdapter adapter;
+        private ListView listView;
+        public static Person currentPerson;
         private LocationServiceConnection lsConnection;
         private CurrencyServiceConnection csConnection;
         private TextCheckerServiceConnection tsConnection;
         IDictionary<string, string> dict = new Dictionary<string, string>();
+        NotificationManager notificationManager;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -53,14 +54,10 @@ namespace BIM494_Assigment_II
             TextView actionBarNameTW = FindViewById<TextView>(Resource.Id.action_bar_title_1);
             actionBarImageView.SetImageBitmap(MainActivity.persons[id].Image);
             actionBarNameTW.Text = MainActivity.persons[id].Name;
-            recyclerView = FindViewById<RecyclerView>(Resource.Id.recyclerView1);
             ChatActivityMessageEditText = FindViewById<EditText>(Resource.Id.chat_activity_message_editText);
-            adapter = new RecyclerViewAdapter(MainActivity.messages[id], name);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ApplicationContext);
-            recyclerView.SetLayoutManager(layoutManager);
-            recyclerView.SetItemAnimator(new DefaultItemAnimator());
-            recyclerView.SetAdapter(adapter);
-            recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
+            adapter = new MessageAdapter(ApplicationContext, MainActivity.messages[currentPerson]);
+            listView = FindViewById<ListView>(Resource.Id.listView2);
+            listView.Adapter = adapter;
             ChatActivitySendButton = FindViewById<Button>(Resource.Id.ChatActivitySendButton);
             ChatActivityCameraButton = FindViewById<Button>(Resource.Id.ChatActivityCameraButton);
             ChatActivitySendButton.Click += OnSendButtonClicked;
@@ -72,14 +69,16 @@ namespace BIM494_Assigment_II
             csConnection.CurrencyServiceConnectionChanged += CurrencyServiceConnectionChanged;
             var intent = new Intent(this, typeof(TextCheckerService));
             BindService(intent, tsConnection, Bind.AutoCreate);
+            notificationManager = (NotificationManager)GetSystemService(Context.NotificationService);
         }
 
         protected async void CurrencyServiceConnectionChanged(object sender, bool e)
         {
             string s = await csConnection.Service.DownloadCurrency();
-            MainActivity.messages[id].Add("Dolar Kuru: " + s);
+            s = string.Format("{0:.##}", Convert.ToDecimal(s));
+            MainActivity.messages[currentPerson].Add(new Message(("1$ = " + s + "₺"), currentPerson, true));
+            listView.SetSelection(adapter.Count - 1);
             adapter.NotifyDataSetChanged();
-            recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
             UnbindService(csConnection);
         }
 
@@ -129,13 +128,13 @@ namespace BIM494_Assigment_II
                     }
                 }
             }
-            else if(requestCode == REQUEST_LOCATION)
+            else if (requestCode == REQUEST_LOCATION)
             {
                 if ((grantResults.Length == 1) && (grantResults[0] == Permission.Granted))
                 {
                     var intent = new Intent(this, typeof(LocationService));
                     BindService(intent, lsConnection, Bind.AutoCreate);
-                    
+
                 }
             }
             else
@@ -148,23 +147,24 @@ namespace BIM494_Assigment_II
         {
             if (ChatActivityMessageEditText.Text != "")
             {
-                string message = ChatActivityMessageEditText.Text;
+                Message message = new Message(ChatActivityMessageEditText.Text, currentPerson, true);
                 foreach (KeyValuePair<string, string> item in dict)
                 {
-                    if (message.Contains(item.Key))
+                    if (message.GetText().Contains(item.Key))
                     {
-                        message = tsConnection.Service.Translate(message);
+                        message.SetText(tsConnection.Service.Translate(message.GetText()));
                         break;
                     }
                 }
-                if (dict.ContainsKey(ChatActivityMessageEditText.Text)){
-                    
-                    
-                }         
-                MainActivity.messages[id].Add(message);
+                if (dict.ContainsKey(ChatActivityMessageEditText.Text))
+                {
+
+
+                }
+                MainActivity.messages[currentPerson].Add(message);
                 ChatActivityMessageEditText.Text = "";
                 adapter.NotifyDataSetChanged();
-                recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
+                notificationManager.Notify(0, GetNotification(message.GetText()));
                 RunOnUiThread(() =>
                 {
                     pb.IncrementProgressBy(1);
@@ -180,13 +180,14 @@ namespace BIM494_Assigment_II
         void LocationChanged(object sender, Android.Locations.LocationChangedEventArgs e)
         {
             var location = e.Location;
-            string s = "Latitude: " + location.Latitude.ToString() + System.Environment.NewLine + 
+            string s = "Latitude: " + location.Latitude.ToString() + System.Environment.NewLine +
                 "Longitude: " + location.Longitude.ToString() + System.Environment.NewLine +
                 "Altitude: " + location.Altitude.ToString() + System.Environment.NewLine +
                 "Speed: " + location.Speed.ToString();
-            MainActivity.messages[id].Add(s);
+            Message message = new Message(s, currentPerson, true);
+            MainActivity.messages[currentPerson].Add(message);
+            listView.SetSelection(adapter.Count - 1);
             adapter.NotifyDataSetChanged();
-            recyclerView.ScrollToPosition(MainActivity.messages[id].Count - 1);
             UnbindService(lsConnection);
         }
 
@@ -210,20 +211,20 @@ namespace BIM494_Assigment_II
                 {
                     var intent = new Intent(this, typeof(LocationService));
                     BindService(intent, lsConnection, Bind.AutoCreate);
-                   
+
                 }
                 else
                 {
                     ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.AccessFineLocation }, REQUEST_LOCATION);
                 }
-                
+
             }
             else if (item.ItemId == Resource.Id.action_currency)
             {
                 var intent = new Intent(this, typeof(CurrencyService));
                 BindService(intent, csConnection, Bind.AutoCreate);
             }
-            else if(item.ItemId == Android.Resource.Id.Home)
+            else if (item.ItemId == Android.Resource.Id.Home)
             {
                 Finish();
             }
@@ -250,6 +251,44 @@ namespace BIM494_Assigment_II
         {
             base.OnDestroy();
             UnbindService(tsConnection);
+        }
+
+        Notification GetNotification(string content)
+        {
+            string tag = currentPerson.Name;
+            Intent intent = new Intent(this, typeof(ChatActivity));
+            intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop);
+            PendingIntentFlags flags = PendingIntentFlags.UpdateCurrent;
+            intent.SetAction(Intent.ActionMain);
+            intent.AddCategory(Intent.CategoryLauncher);
+            PendingIntent pendingIntent = PendingIntent.GetActivity(this, 0, intent, flags);
+            // Beginning with API level 26 (Oreo) all notifications must be assigned to a channel (aka: category), otherwise they won't be shown.
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                const string notificationChannelId = "MESSAGE_CHANNEL";
+                
+                var notificationChannel = new NotificationChannel(notificationChannelId, "Message", NotificationImportance.Low);
+                notificationManager.CreateNotificationChannel(notificationChannel);
+
+                return new NotificationCompat.Builder(this, notificationChannelId)
+                .SetContentTitle(tag)
+                .SetAutoCancel(true)
+                .SetContentText(content)
+                .SetSmallIcon(Resource.Drawable.whatsapp_16px)
+                .SetContentIntent(pendingIntent)
+                .Build();
+            }
+            else
+            {
+                // Running on a device older than Oreo.
+                return new NotificationCompat.Builder(this)
+                .SetContentTitle(tag)
+                .SetAutoCancel(true)
+                .SetContentText(content)
+                .SetSmallIcon(Resource.Drawable.whatsapp_16px)
+                .SetContentIntent(pendingIntent)
+                .Build();
+            }
         }
     }
 }

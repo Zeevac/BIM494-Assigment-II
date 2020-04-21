@@ -39,15 +39,13 @@ namespace BIM494_Assigment_II
             TextView personMessage = (TextView)convertView.FindViewById(Resource.Id.message);
             ImageView personImage = (ImageView)convertView.FindViewById(Resource.Id.imageView);
             Person person = personArrayList.ElementAt(position);
+            
+            personMessage.Text = "";
             personName.Text = person.Name;
-            if (MainActivity.messages[person.Id].Count != 0)
-            {
-                personMessage.Text = MainActivity.messages[person.Id][MainActivity.messages[person.Id].Count - 1];
+            if (MainActivity.messages[person].Count != 0){
+                personMessage.Text = MainActivity.messages[person][MainActivity.messages[person].Count-1].GetText();
             }
-            else
-            {
-                personMessage.Text = "";
-            }
+            
             personImage.SetImageBitmap(person.Image);
             return convertView;
         }

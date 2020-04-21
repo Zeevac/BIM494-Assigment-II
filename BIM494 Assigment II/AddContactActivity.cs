@@ -20,7 +20,6 @@ namespace BIM494_Assigment_II
         private Button addButton;
         private EditText nameEditText, surnameEditText;
         private int index;
-        private string filename;
         public static int SELECT_IMAGE = 1001;
         private Bitmap newPersonImage;
         private string path;
@@ -42,7 +41,7 @@ namespace BIM494_Assigment_II
         {
             if (nameEditText.Text != "" && imageView.Drawable != null)
             {
-                index = MainActivity.messages.Count;
+                index = MainActivity.persons.Count;
                 Intent intent = new Intent(this, typeof(MainActivity));
                 intent.PutExtra("personID", index);
                 intent.PutExtra("personName", nameEditText.Text);

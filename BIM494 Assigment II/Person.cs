@@ -1,11 +1,13 @@
 ﻿using Android.Graphics;
+using Java.IO;
+using Newtonsoft.Json;
 using System;
 
-public class Person
+public class Person : Java.Lang.Object
 {
-    private int id;
-    private string name;
-    private Bitmap image;
+    public int id;
+    public string name;
+    public Bitmap image;
 
     public Person(int id, string name, Bitmap image)
     {
@@ -37,8 +39,4 @@ public class Person
         set => image = value;   // set method
     }
 
-    public static explicit operator Java.Lang.Object(Person v)
-    {
-        throw new NotImplementedException();
-    }
 }

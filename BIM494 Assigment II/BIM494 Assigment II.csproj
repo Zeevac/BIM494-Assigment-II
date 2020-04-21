@@ -72,6 +72,8 @@
     <Compile Include="LocationServiceConnection.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="CurrencyService.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageAdapter.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonAdapter.cs" />
@@ -206,6 +208,30 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\camera_32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\their_message.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\their_message.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\circle.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\my_message.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\my_message.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\whatsapp_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\whatsapp_16px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\whatsapp_72px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
