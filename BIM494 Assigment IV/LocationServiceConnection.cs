@@ -2,7 +2,7 @@ using Android.Content;
 using Android.OS;
 using System;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     class LocationServiceConnection : Java.Lang.Object, IServiceConnection
     {

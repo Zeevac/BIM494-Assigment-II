@@ -5,7 +5,7 @@ using Android.Views;
 using Android.Widget;
 using Java.Lang;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     public class MessageAdapter : BaseAdapter
     {
@@ -36,18 +36,18 @@ namespace BIM494_Assigment_II
             
             MessageViewHolder holder = new MessageViewHolder();
                 Message message = messages[position];
-                if (message.isBelongsToCurrentUser())
+                if (message.BelongsToCurrentUser)
                 { // this message was sent by us 
                     convertView = mInflater.Inflate(Resource.Layout.my_message, null);
                     holder.messageTextView = (TextView)convertView.FindViewById(Resource.Id.message_body);
-                    holder.messageTextView.Text = message.GetText();
+                    holder.messageTextView.Text = message.Text;
 
                 }
                 else
                 { // this message was sent by someone else
                     convertView = mInflater.Inflate(Resource.Layout.their_message, null);
                     holder.messageTextView = (TextView)convertView.FindViewById(Resource.Id.message_body);
-                    holder.messageTextView.Text = message.GetText();
+                    holder.messageTextView.Text = message.Text;
                 }
 
             return convertView;

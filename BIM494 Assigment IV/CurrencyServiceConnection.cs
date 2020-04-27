@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     public class CurrencyServiceConnection : Java.Lang.Object, IServiceConnection
     {

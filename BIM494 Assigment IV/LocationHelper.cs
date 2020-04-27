@@ -5,7 +5,7 @@ using Android.Runtime;
 using Android.Locations;
 using Android.App;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     public class LocationHelper : Java.Lang.Object, ILocationListener
     {

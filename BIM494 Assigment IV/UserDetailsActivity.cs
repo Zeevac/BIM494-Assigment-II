@@ -1,11 +1,12 @@
 ﻿
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Widget;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     [Activity(Label = "UserDetailsActivity")]
     public class UserDetailsActivity : AppCompatActivity
@@ -24,7 +25,7 @@ namespace BIM494_Assigment_II
             nameTW = FindViewById<TextView>(Resource.Id.userDatils_activity_name_textView);
             nameTW.Text = MainActivity.persons[UserID].Name;
             ImageView imageViewUserDetails = FindViewById<ImageView>(Resource.Id.userDatils_activity_imageView);
-            imageViewUserDetails.SetImageBitmap(MainActivity.persons[UserID].Image);
+            imageViewUserDetails.SetImageBitmap(BitmapFactory.DecodeByteArray(MainActivity.persons[UserID].Image,0, MainActivity.persons[UserID].Image.Length));
         }
     }
 }

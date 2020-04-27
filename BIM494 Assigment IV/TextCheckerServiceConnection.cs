@@ -1,7 +1,7 @@
 ﻿using Android.Content;
 using Android.OS;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     public class TextCheckerServiceConnection : Java.Lang.Object, IServiceConnection
     {

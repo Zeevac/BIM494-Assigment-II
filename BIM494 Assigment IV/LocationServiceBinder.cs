@@ -3,7 +3,7 @@ using Android.OS;
 using Android.Locations;
 using Android.Runtime;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     public class LocationServiceBinder : Binder
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIM494 Assigment II", "BIM494 Assigment II\BIM494 Assigment II.csproj", "{0A6166AF-F1D6-45F6-AFFA-3B55E393C073}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIM494 Assigment IV", "BIM494 Assigment IV\BIM494 Assigment IV.csproj", "{0A6166AF-F1D6-45F6-AFFA-3B55E393C073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

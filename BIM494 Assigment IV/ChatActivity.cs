@@ -11,10 +11,11 @@ using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using SQLite;
 using System;
 using System.Collections.Generic;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     [Activity(Label = "ChatActivity", Theme = "@style/MyTheme")]
     public class ChatActivity : AppCompatActivity
@@ -24,7 +25,6 @@ namespace BIM494_Assigment_II
         private EditText ChatActivityMessageEditText;
         private ProgressBar pb;
         private Button ChatActivitySendButton, ChatActivityCameraButton;
-        private int id;
         public static Person currentPerson;
         private LocationServiceConnection lsConnection;
         private CurrencyServiceConnection csConnection;
@@ -33,10 +33,13 @@ namespace BIM494_Assigment_II
         NotificationManager notificationManager;
         private RecyclerViewAdapter adapter;
         private RecyclerView recylerView;
-
+        private SQLiteConnection conn;
+        List<Message> currentPersonMessages = new List<Message>();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            conn = MyConnectionFactory.Instance;
+            conn.CreateTable<Message>();
             dict.Add("asap", "as soon as possible");
             dict.Add("bbl", "be back like");
             dict.Add("omg", "oh my god");
@@ -46,20 +49,17 @@ namespace BIM494_Assigment_II
             SetSupportActionBar(toolbar);
             SupportActionBar.SetDisplayHomeAsUpEnabled(true);
             SupportActionBar.SetDisplayShowHomeEnabled(true);
-            string name = Intent.Extras.GetString("name");
-            id = Intent.Extras.GetInt("id");
+            string name = currentPerson.Name;
+            int id = currentPerson.Id;
             Title = name;
             pb = FindViewById<ProgressBar>(Resource.Id.pb);
             pb.Max = 10;
             pb.Progress = 0;
             ImageView actionBarImageView = FindViewById<ImageView>(Resource.Id.conversation_contact_photo);
             TextView actionBarNameTW = FindViewById<TextView>(Resource.Id.action_bar_title_1);
-            actionBarImageView.SetImageBitmap(MainActivity.persons[id].Image);
+            actionBarImageView.SetImageBitmap(BitmapFactory.DecodeByteArray(MainActivity.persons[id].Image, 0, MainActivity.persons[id].Image.Length));
             actionBarNameTW.Text = MainActivity.persons[id].Name;
             ChatActivityMessageEditText = FindViewById<EditText>(Resource.Id.chat_activity_message_editText);
-            //adapter = new MessageAdapter(ApplicationContext, MainActivity.messages[currentPerson]);
-            //listView = FindViewById<ListView>(Resource.Id.listView2);
-            //listView.Adapter = adapter;
             ChatActivitySendButton = FindViewById<Button>(Resource.Id.ChatActivitySendButton);
             ChatActivityCameraButton = FindViewById<Button>(Resource.Id.ChatActivityCameraButton);
             ChatActivitySendButton.Click += OnSendButtonClicked;
@@ -73,19 +73,31 @@ namespace BIM494_Assigment_II
             BindService(intent, tsConnection, Bind.AutoCreate);
             notificationManager = (NotificationManager)GetSystemService(Context.NotificationService);
             recylerView = FindViewById<RecyclerView>(Resource.Id.recylerview);
-            adapter = new RecyclerViewAdapter(this, MainActivity.messages[currentPerson]);
+            var list = conn.Query<Message>("SELECT * FROM Messages WHERE SenderID = ?", currentPerson.Id);
+            foreach (var message in list)
+            {
+                currentPersonMessages.Add(message);
+            }
+            adapter = new RecyclerViewAdapter(this, currentPersonMessages);
             recylerView.SetAdapter(adapter);
             recylerView.SetLayoutManager(new LinearLayoutManager(this));
+            if(currentPersonMessages.Count != 0)
+            {
+                recylerView.ScrollToPosition(currentPersonMessages.Count - 1);
+            }
+            
         }
 
         protected async void CurrencyServiceConnectionChanged(object sender, bool e)
         {
             string s = await csConnection.Service.DownloadCurrency();
             s = string.Format("{0:.##}", Convert.ToDecimal(s));
-            MainActivity.messages[currentPerson].Add(new Message(("1$ = " + s + "₺"),null, currentPerson, true));
-            //listView.SetSelection(adapter.Count - 1);
+            Message message = new Message(("1$ = " + s + "₺"), null, currentPerson.Id, true);
+            //MainActivity.messages[currentPerson].Add(message);
+            currentPersonMessages.Add(message);
             adapter.NotifyDataSetChanged();
-            recylerView.ScrollToPosition(MainActivity.messages[currentPerson].Count - 1);
+            recylerView.ScrollToPosition(currentPersonMessages.Count - 1);
+            conn.Insert(message);
             UnbindService(csConnection);
         }
 
@@ -154,12 +166,12 @@ namespace BIM494_Assigment_II
         {
             if (ChatActivityMessageEditText.Text != "")
             {
-                Message message = new Message(ChatActivityMessageEditText.Text,null, currentPerson, true);
+                Message message = new Message(ChatActivityMessageEditText.Text,null, currentPerson.Id, true);
                 foreach (KeyValuePair<string, string> item in dict)
                 {
-                    if (message.GetText().Contains(item.Key))
+                    if (message.Text.Contains(item.Key))
                     {
-                        message.SetText(tsConnection.Service.Translate(message.GetText()));
+                        message.Text = (tsConnection.Service.Translate(message.Text));
                         break;
                     }
                 }
@@ -168,11 +180,13 @@ namespace BIM494_Assigment_II
 
 
                 }
-                MainActivity.messages[currentPerson].Add(message);
+                //MainActivity.messages[currentPerson].Add(message);
+                currentPersonMessages.Add(message);
                 ChatActivityMessageEditText.Text = "";
                 adapter.NotifyDataSetChanged();
-                recylerView.ScrollToPosition(MainActivity.messages[currentPerson].Count - 1);
-                notificationManager.Notify(0, GetNotification(message.GetText()));
+                recylerView.ScrollToPosition(currentPersonMessages.Count - 1);
+                conn.Insert(message);
+                notificationManager.Notify(0, GetNotification(message.Text));
                 RunOnUiThread(() =>
                 {
                     pb.IncrementProgressBy(1);
@@ -192,11 +206,12 @@ namespace BIM494_Assigment_II
                 "Longitude: " + location.Longitude.ToString() + System.Environment.NewLine +
                 "Altitude: " + location.Altitude.ToString() + System.Environment.NewLine +
                 "Speed: " + location.Speed.ToString();
-            Message message = new Message(s,null ,currentPerson, true);
-            MainActivity.messages[currentPerson].Add(message);
-            //listView.SetSelection(adapter.Count - 1);
+            Message message = new Message(s,null ,currentPerson.Id, true);
+            //MainActivity.messages[currentPerson].Add(message);
+            currentPersonMessages.Add(message);
             adapter.NotifyDataSetChanged();
-            recylerView.ScrollToPosition(MainActivity.messages[currentPerson].Count - 1);
+            recylerView.ScrollToPosition(currentPersonMessages.Count - 1);
+            conn.Insert(message);
             UnbindService(lsConnection);
         }
 
@@ -211,7 +226,7 @@ namespace BIM494_Assigment_II
             if (item.ItemId == Resource.Id.action_details)
             {
                 Intent intent = new Intent(ApplicationContext, typeof(UserDetailsActivity));
-                intent.PutExtra("id", id);
+                intent.PutExtra("id", currentPerson.Id);
                 StartActivity(intent);
             }
             else if (item.ItemId == Resource.Id.action_location)
@@ -248,11 +263,12 @@ namespace BIM494_Assigment_II
             {
                 Bundle extras = data.Extras;
                 Bitmap imageBitmap = (Bitmap)extras.Get("data");
-                Message message = new Message("",imageBitmap, currentPerson, true);
-                MainActivity.messages[currentPerson].Add(message);
-                //listView.SetSelection(adapter.Count - 1);
+                Message message = new Message("",BitmapConverter.GetBytesFromBitmap(imageBitmap), currentPerson.Id, true);
+                //MainActivity.messages[currentPerson].Add(message);
+                currentPersonMessages.Add(message);
                 adapter.NotifyDataSetChanged();
-                recylerView.ScrollToPosition(MainActivity.messages[currentPerson].Count - 1);
+                recylerView.ScrollToPosition(currentPersonMessages.Count - 1);
+                conn.Insert(message);
             }
         }
 

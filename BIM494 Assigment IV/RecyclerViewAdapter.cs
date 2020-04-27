@@ -1,11 +1,12 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using System.Collections.Generic;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     [Activity(Label = "RecyclerViewAdapter")]
     public class RecyclerViewAdapter : RecyclerView.Adapter
@@ -24,7 +25,7 @@ namespace BIM494_Assigment_II
         public override int GetItemViewType(int position)
         {
             Message message = messages[position];
-            if (!message.isBelongsToCurrentUser())
+            if (!message.BelongsToCurrentUser)
             {
                 return VIEW_TYPE_MESSAGE_RECEIVED;
             }
@@ -104,7 +105,7 @@ namespace BIM494_Assigment_II
         }
 
         public void bind(Message message) {
-            image.SetImageBitmap(message.Image);
+            image.SetImageBitmap(BitmapFactory.DecodeByteArray(message.Image,0,message.Image.Length));
         }
     }
 
@@ -123,7 +124,7 @@ namespace BIM494_Assigment_II
 
         public void bind(Message message)
         {
-            messageTextView.Text = message.GetText();
+            messageTextView.Text = message.Text;
         }
     }
 
@@ -141,7 +142,7 @@ namespace BIM494_Assigment_II
 
         public void bind(Message message)
         {
-            messageTextView.Text = message.GetText();
+            messageTextView.Text = message.Text;
         }
     }
 }

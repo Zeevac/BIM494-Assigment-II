@@ -8,9 +8,11 @@ using Android.Provider;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Widget;
+using SQLite;
 using System;
+using System.Collections.Generic;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
     [Activity(Label = "AddContactActivity")]
     public class AddContactActivity : Activity
@@ -23,10 +25,12 @@ namespace BIM494_Assigment_II
         public static int SELECT_IMAGE = 1001;
         private Bitmap newPersonImage;
         private string path;
+        private SQLiteConnection conn;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.activity_addContact);
+            conn = MyConnectionFactory.Instance;
             imageView = FindViewById<ImageView>(Resource.Id.load_image_imageView);
             loadButton = FindViewById<Button>(Resource.Id.load_image_button);
             addButton = FindViewById<Button>(Resource.Id.add_contact_button);
@@ -34,6 +38,8 @@ namespace BIM494_Assigment_II
             surnameEditText = FindViewById<EditText>(Resource.Id.surname_editText);
             loadButton.Click += loadButtonClicked;
             addButton.Click += addContactButtonClicked;
+            conn = MyConnectionFactory.Instance;
+            conn.CreateTable<Person>();
 
         }
 
@@ -42,12 +48,13 @@ namespace BIM494_Assigment_II
             if (nameEditText.Text != "" && imageView.Drawable != null)
             {
                 index = MainActivity.persons.Count;
-                Intent intent = new Intent(this, typeof(MainActivity));
-                intent.PutExtra("personID", index);
-                intent.PutExtra("personName", nameEditText.Text);
-                intent.PutExtra("personSurname", surnameEditText.Text);
-                intent.PutExtra("personImagePath", path);
-                StartActivity(intent);
+                Bitmap personImage = BitmapFactory.DecodeFile(path);
+                Person newPerson = new Person(index, nameEditText.Text + " " + surnameEditText.Text, BitmapConverter.GetBytesFromBitmap(personImage));
+                MainActivity.persons.Add(newPerson);
+                //MainActivity.messages.Add(newPerson, new List<Message>());
+                int i = conn.Insert(newPerson);
+                Console.WriteLine(i);
+                StartActivity(new Intent(this, typeof(MainActivity)));
                 Finish();
             }
             else

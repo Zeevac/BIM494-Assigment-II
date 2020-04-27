@@ -11,7 +11,7 @@ using Java.IO;
 using Org.Json;
 using Android.OS;
 
-namespace BIM494_Assigment_II
+namespace BIM494_Assigment_IV
 {
 	[Service]
 	public class CurrencyService : Service

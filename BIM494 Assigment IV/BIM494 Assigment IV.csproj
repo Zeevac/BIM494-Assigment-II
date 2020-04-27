@@ -10,8 +10,8 @@
     <TemplateGuid>{122416d6-6b49-4ee2-a1e8-b825f31c79fe}</TemplateGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BIM494_Assigment_II</RootNamespace>
-    <AssemblyName>BIM494 Assigment II</AssemblyName>
+    <RootNamespace>BIM494_Assigment_IV</RootNamespace>
+    <AssemblyName>BIM494 Assigment IV</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddContactActivity.cs" />
+    <Compile Include="BitmapConverter.cs" />
     <Compile Include="ChatActivity.cs" />
     <Compile Include="CurrencyServiceBinder.cs" />
     <Compile Include="CurrencyServiceConnection.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="CurrencyService.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageAdapter.cs" />
+    <Compile Include="MyConnectionFactory.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonAdapter.cs" />
@@ -122,6 +124,9 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.6.292</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
   </ItemGroup>
